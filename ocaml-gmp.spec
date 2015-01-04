@@ -1,3 +1,11 @@
+#
+# Conditional build:
+%bcond_without	opt		# build opt
+
+%ifarch x32
+%undefine	with_opt
+%endif
+
 Summary:	GMP binding for OCaml
 Summary(pl.UTF-8):	Wiązania GMP dla OCamla
 Name:		ocaml-gmp
@@ -49,17 +57,17 @@ biblioteki MLGMP.
 %{__make} clean
 
 %{__make} \
+	%{?with_opt:HAS_OPT=1} \
 	CC="%{__cc} %{rpmcflags} -fPIC" \
 	CFLAGS_MISC="%{rpmcflags} -fPIC -Wall -Wno-unused -Werror" \
-	GMP_INCLUDES= \
-	HAS_OPT=1
+	GMP_INCLUDES=
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT \
-	HAS_OPT=1
+	%{?with_opt:HAS_OPT=1} \
+	DESTDIR=$RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/gmp
 cat > $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/gmp/META <<EOF
@@ -83,7 +91,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc *.mli
 %dir %{_libdir}/ocaml/gmp
-%{_libdir}/ocaml/gmp/gmp.a
 %{_libdir}/ocaml/gmp/gmp.cm[ixa]*
+%if %{with opt}
+%{_libdir}/ocaml/gmp/gmp.a
+%endif
 %{_libdir}/ocaml/gmp/libgmpstub.a
 %{_libdir}/ocaml/site-lib/gmp
