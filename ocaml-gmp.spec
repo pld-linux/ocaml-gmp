@@ -1,16 +1,16 @@
 #
 # Conditional build:
-%bcond_without	opt		# build opt
+%bcond_without	ocaml_opt	# build opt (native code)
 
-%ifarch x32
-%undefine	with_opt
+%ifnarch %{ix86} %{x8664} arm aarch64 ppc sparc sparcv9
+%undefine	with_ocaml_opt
 %endif
 
 Summary:	GMP binding for OCaml
 Summary(pl.UTF-8):	Wiązania GMP dla OCamla
 Name:		ocaml-gmp
 Version:	20120224
-Release:	3
+Release:	4
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www-verimag.imag.fr/~monniaux/download/mlgmp_%{version}.tar.gz
@@ -57,7 +57,7 @@ biblioteki MLGMP.
 %{__make} clean
 
 %{__make} \
-	%{?with_opt:HAS_OPT=1} \
+	%{?with_ocaml_opt:HAS_OPT=1} \
 	CC="%{__cc} %{rpmcflags} -fPIC" \
 	CFLAGS_MISC="%{rpmcflags} -fPIC -Wall -Wno-unused -Werror" \
 	GMP_INCLUDES=
@@ -66,7 +66,7 @@ biblioteki MLGMP.
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
-	%{?with_opt:HAS_OPT=1} \
+	%{?with_ocaml_opt:HAS_OPT=1} \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/gmp
@@ -78,6 +78,9 @@ archive(byte) = "gmp.cma"
 archive(native) = "gmp.cmxa"
 linkopts = ""
 EOF
+
+# packaged as %doc
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/ocaml/gmp/gmp.mli
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -91,9 +94,11 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc *.mli
 %dir %{_libdir}/ocaml/gmp
-%{_libdir}/ocaml/gmp/gmp.cm[ixa]*
-%if %{with opt}
+%{_libdir}/ocaml/gmp/gmp.cma
+%{_libdir}/ocaml/gmp/gmp.cmi
+%if %{with ocaml_opt}
 %{_libdir}/ocaml/gmp/gmp.a
+%{_libdir}/ocaml/gmp/gmp.cmxa
 %endif
 %{_libdir}/ocaml/gmp/libgmpstub.a
 %{_libdir}/ocaml/site-lib/gmp
