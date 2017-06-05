@@ -10,7 +10,7 @@ Summary:	GMP binding for OCaml
 Summary(pl.UTF-8):	Wiązania GMP dla OCamla
 Name:		ocaml-gmp
 Version:	20120224
-Release:	8
+Release:	9
 License:	LGPL v2+
 Group:		Libraries
 Source0:	http://www-verimag.imag.fr/~monniaux/download/mlgmp_%{version}.tar.gz
@@ -56,7 +56,7 @@ biblioteki MLGMP.
 
 %build
 # clean up precompiled files
-%{__make} -j1 1clean
+%{__make} -j1 clean
 
 %{__make} -j1 \
 	%{?with_ocaml_opt:HAS_OPT=1} \
