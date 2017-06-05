@@ -56,9 +56,9 @@ biblioteki MLGMP.
 
 %build
 # clean up precompiled files
-%{__make} clean
+%{__make} -j1 1clean
 
-%{__make} \
+%{__make} -j1 \
 	%{?with_ocaml_opt:HAS_OPT=1} \
 	CC="%{__cc} %{rpmcflags} -fPIC" \
 	CFLAGS_MISC="%{rpmcflags} -fPIC -Wall -Wno-unused -Werror" \
