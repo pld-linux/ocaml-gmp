@@ -2,7 +2,7 @@
 # Conditional build:
 %bcond_without	ocaml_opt	# build opt (native code)
 
-%ifnarch %{ix86} %{x8664} arm aarch64 ppc sparc sparcv9
+%ifnarch %{ix86} %{x8664} %{arm} aarch64 ppc sparc sparcv9
 %undefine	with_ocaml_opt
 %endif
 
@@ -17,7 +17,7 @@ Source0:	http://www-verimag.imag.fr/~monniaux/download/mlgmp_%{version}.tar.gz
 # Source0-md5:	7001db70f5fed91f230b459425129f96
 Patch0:		%{name}-make.patch
 Patch1:		inttypes.patch
-URL:		http://www-verimag.imag.fr/~monniaux/programmes.html.en
+URL:		http://www-verimag.imag.fr/~monniaux/
 BuildRequires:	gmp-devel >= 5.0.1
 BuildRequires:	mpfr-devel >= 3.0.1
 BuildRequires:	ocaml >= 1:3.11.2
